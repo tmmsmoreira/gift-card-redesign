@@ -9,9 +9,14 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/devtools": "^1.0.3",
-    "nuxt": "^3.8.2",
-    "vue": "^3.3.8",
-    "vue-router": "^4.2.5"
+    "@nuxt/devtools": "^1.4.1",
+    "nuxt": "^3.13.1",
+    "vue": "^3.5.3",
+    "vue-router": "^4.4.3"
+  },
+  "dependencies": {
+    "@nordhealth/components": "^3.17.0",
+    "@nordhealth/css": "^3.2.1",
+    "@nordhealth/vue": "^3.17.0"
   }
 }
