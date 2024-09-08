@@ -1,5 +1,6 @@
 <template>
   <nord-layout>
+    <AppNavigation />
     <NuxtPage />
   </nord-layout>
 </template>

@@ -1,15 +1,15 @@
 import { defineStore } from 'pinia'
 import useAppWrite from "../composables/useAppWrite"
-import { ID } from "appwrite";
-import type { Models } from "appwrite";
+import { ID, Query } from "appwrite"
+import type { IGiftCard } from "../types"
 
-interface IGiftCard extends Models.Document {
-  name: string,
-  issueDate: Date,
-  type: "price" | "service",
-  typeData: string,
-  code: string,
-  status: boolean
+import giftCardsList from "../consts/giftCards.json"
+
+interface IGiftCardsStore {
+  loading: boolean,
+  list: IGiftCard[],
+  totalDocuments: number
+  selectedItem: IGiftCard | null
 }
 
 const config = useRuntimeConfig()
@@ -23,21 +23,37 @@ const { databases } = useAppWrite()
 export const useGiftCardsStore = defineStore('giftCards', {
   state: () => {
     return {
-      list: [] as IGiftCard[]
-    }
+      loading: false,
+      list: [],
+      totalDocuments: 0,
+      selectedItem: null
+    } as IGiftCardsStore
   },
   actions: {
-    async listGiftCards() {
+    async listGiftCards(limit: number, offset?: number) {
+      this.loading = true
+
+      if (!offset) offset = 0
+
       const promise = databases.listDocuments(
         APPWRITE_DATABASE_ID,
-        APPWRITE_GIFT_CARD_COLLECTION_ID
+        APPWRITE_GIFT_CARD_COLLECTION_ID,
+        [
+          Query.limit(limit),
+          Query.offset(offset)
+        ]
       )
   
       await promise.then((response) => {
         this.list = response.documents as IGiftCard[]
+        this.totalDocuments = response.total
         console.log(response.documents)
       }).catch((error) => {
         console.log(error)
+        this.list = giftCardsList as IGiftCard[]
+        this.totalDocuments = giftCardsList.length
+      }).finally(() => {
+        this.loading = false
       })
     },
 
@@ -56,18 +72,14 @@ export const useGiftCardsStore = defineStore('giftCards', {
       })
     },
 
-    async getGiftCard(id: IGiftCard['$id']) {
+    getGiftCard(id: IGiftCard['$id']) {
       const promise = databases.getDocument(
         APPWRITE_DATABASE_ID,
         APPWRITE_GIFT_CARD_COLLECTION_ID,
         id
       )
   
-      await promise.then((response) => {
-        console.log(response)
-      }).catch((error) => {
-        console.log(error)
-      })
+      return promise
     },
 
     async updateGiftCard(data: IGiftCard) {
@@ -98,5 +110,5 @@ export const useGiftCardsStore = defineStore('giftCards', {
         console.log(error)
       })
     }
-  },
+  }
 })

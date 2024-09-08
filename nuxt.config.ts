@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   },
 
   ssr: false,
-  css: ['~/node_modules/@nordhealth/css/lib/nord.css'],
+  css: ['~/assets/base.css', '~/node_modules/@nordhealth/css/lib/nord.css'],
 
   runtimeConfig: {
     public: {
