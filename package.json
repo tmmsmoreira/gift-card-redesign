@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.4.1",
+    "@pinia/nuxt": "^0.5.4",
     "nuxt": "^3.13.1",
     "vue": "^3.5.3",
     "vue-router": "^4.4.3"
@@ -17,6 +18,7 @@
   "dependencies": {
     "@nordhealth/components": "^3.17.0",
     "@nordhealth/css": "^3.2.1",
-    "@nordhealth/vue": "^3.17.0"
+    "@nordhealth/vue": "^3.17.0",
+    "appwrite": "14.0.1"
   }
 }

@@ -10,6 +10,14 @@ export default defineNuxtConfig({
   ssr: false,
   css: ['~/node_modules/@nordhealth/css/lib/nord.css'],
 
+  runtimeConfig: {
+    public: {
+      APPWRITE_PROJECT_ID: process.env.APPWRITE_PROJECT_ID,
+      APPWRITE_DATABASE_ID: process.env.APPWRITE_DATABASE_ID,
+      APPWRITE_GIFT_CARD_COLLECTION_ID: process.env.APPWRITE_GIFT_CARD_COLLECTION_ID
+    }
+  },
+
   vite: {
     vue: {
       template: {
@@ -22,4 +30,5 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-09-07',
+  modules: ['@pinia/nuxt'],
 });
