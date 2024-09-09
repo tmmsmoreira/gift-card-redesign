@@ -2,6 +2,10 @@
 import "@nordhealth/components/lib/Stack"
 import "@nordhealth/components/lib/Card"
 import "@nordhealth/components/lib/Icon"
+
+definePageMeta({
+  middleware: 'auth',
+});
 </script>
 
 <template>
