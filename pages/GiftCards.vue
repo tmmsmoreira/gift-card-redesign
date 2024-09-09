@@ -29,8 +29,10 @@ const modalElement = ref<InstanceType<typeof GiftCardsModal>>()
 const searchText = ref('')
 
 const handlePageChange = (page: number) => {
-  currentPage.value = page;
-  listGiftCards()
+  if(currentPage.value !== page) {
+    currentPage.value = page;
+    listGiftCards()
+  }
 }
 
 const handlePageSizeChange = (size: string) =>{
