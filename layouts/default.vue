@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import "@nordhealth/components/lib/Layout"
 
-import AppNavigation from "../components/AppNavigation.vue";
+import AppNavigation from "../components/AppNavigation.vue"
 </script>
 
 <template>

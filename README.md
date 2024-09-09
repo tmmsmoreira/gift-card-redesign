@@ -78,4 +78,9 @@ The project is configured to be deployed on Vercel. You can deploy it by clickin
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/gift-card-redesign&template=nuxtjs)
 
+## TODOS
+- Improve UI to better handle errors for failed requests
+- Include logic to remove a gift card
+- Configure eslint, to provide project-aware, easy-to-use, extensible and future-proof integrations
+
 ```

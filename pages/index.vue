@@ -5,7 +5,7 @@ import "@nordhealth/components/lib/Icon"
 
 definePageMeta({
   middleware: 'auth',
-});
+})
 </script>
 
 <template>

@@ -66,14 +66,14 @@ export const useGiftCardsStore = defineStore('giftCards', {
         // Filter the local data by search term (if any)
         const filteredData = giftCardsList.documents.filter(card => 
           card.name.includes(search) || card.code.includes(search)
-        ) as IGiftCard[];
+        ) as IGiftCard[]
 
         // Apply pagination logic using limit and offset
-        const paginatedData = filteredData.slice(offset, offset + limit);
+        const paginatedData = filteredData.slice(offset, offset + limit)
 
         // Update the store state with the filtered and paginated data
-        this.list = paginatedData;
-        this.totalDocuments = filteredData.length;
+        this.list = paginatedData
+        this.totalDocuments = filteredData.length
       }).finally(() => {
         this.loading = false // Set loading state to false after fetching
       })
@@ -109,7 +109,7 @@ export const useGiftCardsStore = defineStore('giftCards', {
     // Update an existing gift card in the AppWrite database
     async updateGiftCard(data: Partial<IGiftCard>) {
       if (!data.$id) {
-        throw new Error("Gift card ID is required for updating.");  // Ensure the ID is provided
+        throw new Error("Gift card ID is required for updating.")  // Ensure the ID is provided
       }
 
       const promise = databases.updateDocument(

@@ -10,7 +10,7 @@ import "@nordhealth/components/lib/Icon"
 
 import { useAuthStore } from "../stores/auth"
 
-const authStore = useAuthStore();
+const authStore = useAuthStore()
 </script>
 
 <template>

@@ -35,19 +35,19 @@ export function generateAlphanumericCode(length = 10) {
  * @returns A debounced version of the provided function.
  */
 export function debounce<T extends (...args: any[]) => void>(func: T, delay: number): (...args: Parameters<T>) => void {
-  let timeoutId: ReturnType<typeof setTimeout> | null = null; // Ensure timeoutId is scoped persistently
+  let timeoutId: ReturnType<typeof setTimeout> | null = null // Ensure timeoutId is scoped persistently
 
   return (...args: Parameters<T>): void => {
     // Clear the previous timeout if it exists
     if (timeoutId !== null) {
-      clearTimeout(timeoutId);
+      clearTimeout(timeoutId)
     }
 
     // Set a new timeout to execute the function after the specified delay
     timeoutId = setTimeout(() => {
-      func(...args);
-      timeoutId = null; // Reset timeoutId after the function has been called
-    }, delay);
+      func(...args)
+      timeoutId = null // Reset timeoutId after the function has been called
+    }, delay)
   }
 }
 

@@ -32,7 +32,7 @@ const searchText = ref('')
 
 const handlePageChange = (page: number) => {
   if(currentPage.value !== page) {
-    currentPage.value = page;
+    currentPage.value = page
     listGiftCards()
   }
 }
@@ -64,7 +64,7 @@ onMounted(() => {
 
 definePageMeta({
   middleware: 'auth',
-});
+})
 </script>
 
 <template>

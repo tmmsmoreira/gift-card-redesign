@@ -6,7 +6,7 @@ import "@nordhealth/components/lib/Modal"
 import "@nordhealth/components/lib/ButtonGroup"
 import "@nordhealth/components/lib/Select"
 
-import type { Modal } from "@nordhealth/components";
+import type { Modal } from "@nordhealth/components"
 import type { IGiftCard } from "../types"
 import { EModalActions } from "../types"
 import giftCards from "../consts/giftCards.json"
@@ -24,7 +24,7 @@ const giftCardsStore = useGiftCardsStore()
 const { itemsPerPage } = storeToRefs(giftCardsStore)
 
 // Define emit to send events
-const emit = defineEmits(['closed']);
+const emit = defineEmits(['closed'])
 
 const modalTitle = computed(() => {
   switch (modalAction.value) {
@@ -94,7 +94,7 @@ const openModal = async (action: EModalActions, cardType?: IGiftCard['$type'], c
       console.log(error)
       modalData.value = giftCards.documents.find(card => {
         return card.$id === cardId
-      }) as IGiftCard | undefined;
+      }) as IGiftCard | undefined
     })
 
     if (modalData.value) {
@@ -130,7 +130,7 @@ const cleanModal = () => {
 const closeModal = (e?: Event) => {
   // Close the modal programmatically if no event is provided
   if (!e) {
-    modalElement.value?.close();
+    modalElement.value?.close()
     emit('closed')
   }
 
