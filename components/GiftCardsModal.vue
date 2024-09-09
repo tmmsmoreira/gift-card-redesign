@@ -57,6 +57,8 @@ const handleSubmit = () => {
       typeData: typeData.value,
     }).then(() => {
       closeModal()
+    }).catch(() => {
+      // TODO: improve UI to handle errors for failed requests
     })
   }
 
@@ -69,6 +71,8 @@ const handleSubmit = () => {
       status: false
     }).then(() => {
       closeModal()
+    }).catch(() => {
+      // TODO: improve UI to handle errors for failed requests
     })
   }
 

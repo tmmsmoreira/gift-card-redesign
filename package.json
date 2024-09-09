@@ -18,6 +18,7 @@
     "@vue/test-utils": "^2.4.6",
     "happy-dom": "^15.7.3",
     "nuxt": "^3.13.1",
+    "nuxt-viewport": "^2.1.6",
     "vitest": "^2.0.5",
     "vue": "^3.5.3",
     "vue-router": "^4.4.3"

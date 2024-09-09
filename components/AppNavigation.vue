@@ -1,5 +1,5 @@
 <template>
-  <nord-navigation slot="nav">
+  <nord-navigation>
     <div slot="header" expand class="n-padding-m">
       <nord-avatar slot="start" name="Bath Clinic" variant="square">M</nord-avatar>
       My Project

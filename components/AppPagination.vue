@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import "@nordhealth/components/lib/Button"
 import "@nordhealth/components/lib/Select"
+import "@nordhealth/components/lib/Stack"
 
 // Define props
 const props = defineProps({
@@ -23,6 +24,8 @@ const props = defineProps({
 })
 
 const { totalPages } = toRefs(props)
+
+const { $viewport } = useNuxtApp()
 
 // Define emit to send events
 const emit = defineEmits(['page-changed', 'page-size-changed'])
@@ -83,82 +86,93 @@ const showRightEllipsis = computed(() => props.currentPage < props.totalPages - 
 </script>
 
 <template>
-  <nav aria-label="Pagination" class="pagination-container">
-    <ul class="pagination">
+  <nord-stack 
+    direction="horizontal"
+    justify-content="space-between"
+    :wrap="$viewport.isLessThan('tablet')"
+    class="n-padding-l"
+  >
+    <nord-visually-hidden id="short-pagination-label">Short pagination</nord-visually-hidden>
+
+    <nord-stack
+      direction="horizontal"
+      role="navigation"
+      aria-labelledby="short-pagination-label"
+      style="--n-stack-gap: var(--n-space-xs)"
+      :justify-content="$viewport.isLessThan('tablet') ? 'center' : 'start'"
+    >
       <!-- Previous Button -->
-      <li>
-        <nord-button :disabled="currentPage === 1" @click.prevent="changePage(currentPage - 1)"
-          :aria-disabled="currentPage === 1">
-          Previous
-        </nord-button>
-      </li>
+      <nord-button 
+        :disabled="currentPage === 1"
+        @click.prevent="changePage(currentPage - 1)"
+        :aria-disabled="currentPage === 1"
+      >
+        Previous
+      </nord-button>
 
       <!-- First Page -->
-      <li :class="['page-item', { active: currentPage === 1 }]">
-        <nord-button :variant="currentPage === 1 ? 'primary' : undefined" @click.prevent="changePage(1)">
-          1
-        </nord-button>
-      </li>
+      <nord-button 
+        :variant="currentPage === 1 ? 'primary' : undefined" 
+        @click.prevent="changePage(1)"
+      >
+        1
+      </nord-button>
 
       <!-- Ellipsis before middle pages -->
-      <li v-if="showLeftEllipsis" class="page-item ellipsis">...</li>
+      <p v-if="showLeftEllipsis" class="n-padding-i-m n-color-text-weaker" aria-hidden="true">…</p>
 
       <!-- Middle Page Numbers -->
-      <li v-for="page in middlePages" :key="page" :class="['page-item', { active: currentPage === page }]">
-        <nord-button :variant="currentPage === page ? 'primary' : undefined" @click.prevent="changePage(page)">
+      <template 
+        v-for="page in middlePages" 
+        :key="page" 
+        :class="['page-item', { active: currentPage === page }]"
+      >
+        <nord-button 
+          :variant="currentPage === page ? 'primary' : undefined"
+          @click.prevent="changePage(page)"
+        >
           {{ page }}
         </nord-button>
-      </li>
+      </template>
 
-      <!-- Ellipsis after middle pages -->
-      <li v-if="showRightEllipsis" class="page-item ellipsis">...</li>
+      <!-- Ellipsis before middle pages -->
+      <p v-if="showRightEllipsis" class="n-padding-i-m n-color-text-weaker" aria-hidden="true">…</p>
 
       <!-- Last Page -->
-      <li v-if="totalPages > 1" :class="['page-item', { active: currentPage === totalPages }]">
-        <nord-button :variant="currentPage === totalPages ? 'primary' : undefined"
-          @click.prevent="changePage(totalPages)">
-          {{ totalPages }}
-        </nord-button>
-      </li>
+      <nord-button 
+        v-if="totalPages > 1"
+        :variant="currentPage === totalPages ? 'primary' : undefined"
+        @click.prevent="changePage(totalPages)"
+      >
+        {{ totalPages }}
+      </nord-button>
 
       <!-- Next Button -->
-      <li>
-        <nord-button :disabled="currentPage === totalPages" @click.prevent="changePage(currentPage + 1)"
-          :aria-disabled="currentPage === totalPages">
-          Next
-        </nord-button>
-      </li>
-    </ul>
+      <nord-button 
+        :disabled="currentPage === totalPages"
+        @click.prevent="changePage(currentPage + 1)"
+        :aria-disabled="currentPage === totalPages"
+      >
+        Next
+      </nord-button>
+    </nord-stack>
 
     <!-- Dropdown for selecting cards per page -->
-    <div class="page-size-selector">
+    <nord-stack 
+      direction="horizontal"
+      :justify-content="$viewport.isLessThan('tablet') ? 'center' : 'end'"
+      align-items="center"
+    >
       <label for="pageSizeSelect">Items per page: </label>
       <nord-select id="pageSizeSelect" v-model="itemsPerPage" hide-label>
         <option v-for="size in availablePageSizes" :key="size" :value="size">
           {{ size }}
         </option>
       </nord-select>
-    </div>
-  </nav>
+    </nord-stack>
+  </nord-stack>
 </template>
 
 <style scoped>
-.pagination-container {
-  display: flex;
-  justify-content: space-between;
-  margin: 1rem 0;
-}
 
-.pagination {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 0.5rem;
-}
-
-.page-size-selector {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
 </style>
