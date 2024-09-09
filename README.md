@@ -8,7 +8,9 @@ This project is a redesign of the gift card system, built using [Nuxt](https://n
 Check out the live example: [Gift Card Redesign](https://gift-card-redesign.vercel.app/)
 
 ## Documentation
-This project includes some unit tests, to demonstrate the functionality.
+Some of the logic implemented here should be moved to a backend where some of the data should be handled by server functions.
+A backend was created to support CROD requests to better simulate a real day-to-day scenario.
+This project includes some unit tests too, to demonstrate their implementation.
 
 Documentation for the tools used in this project:
 1. Nuxt 3, refer to the [Nuxt 3 documentation](https://v3.nuxtjs.org).

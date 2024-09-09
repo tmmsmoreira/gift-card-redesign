@@ -30,13 +30,12 @@ const searchText = ref('')
 
 const handlePageChange = (page: number) => {
   currentPage.value = page;
-  giftCardsStore.listGiftCards(itemsPerPage.value, currentPage.value - 1)
-  console.log('Current Page:', page);
-};
+  listGiftCards()
+}
 
 const handlePageSizeChange = (size: string) =>{
   itemsPerPage.value = Number(size)
-  giftCardsStore.listGiftCards(itemsPerPage.value, undefined, searchText.value)
+  listGiftCards()
 }
 
 const totalPages = computed(() => {
@@ -44,11 +43,17 @@ const totalPages = computed(() => {
 })
 
 watch(searchText, debounce(() => {
-  giftCardsStore.listGiftCards(itemsPerPage.value, undefined, searchText.value)
+  listGiftCards()
 }, 300))
 
+const offset = computed(() => (currentPage.value - 1) * itemsPerPage.value)
+
+const listGiftCards = () => {
+  giftCardsStore.listGiftCards(itemsPerPage.value, offset.value, searchText.value)
+}
+
 onMounted(() => {
-  giftCardsStore.listGiftCards(itemsPerPage.value, undefined, searchText.value)
+  listGiftCards()
 })
 </script>
 
@@ -85,7 +90,11 @@ onMounted(() => {
           type="search"
           style="--n-input-inline-size: 300px"
           v-model="searchText"
-        />
+        >
+          <nord-button v-if="searchText" slot="end" square size="s" @click="searchText = ''">
+            <nord-icon name="interface-close-small" />
+          </nord-button>
+        </nord-input>
       </div>
 
       <nord-table>
@@ -155,7 +164,7 @@ onMounted(() => {
       </div>
     </nord-card>
 
-    <GiftCardsModal ref="modalElement" />
+    <GiftCardsModal ref="modalElement" @closed="listGiftCards"/>
   </nord-stack>
 </template>
 

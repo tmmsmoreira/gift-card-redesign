@@ -20,57 +20,66 @@ const props = defineProps({
     type: Array as () => number[], // Array of available page sizes
     default: () => [10, 20, 50],
   },
-});
+})
+
+const { totalPages } = toRefs(props)
 
 // Define emit to send events
-const emit = defineEmits(['page-changed', 'page-size-changed']);
+const emit = defineEmits(['page-changed', 'page-size-changed'])
 
 // Method to change the page
 const changePage = (page: number) => {
-  if (page > 0 && page <= props.totalPages) {
-    emit('page-changed', page);
+  if (page > 0 && page <= totalPages.value) {
+    emit('page-changed', page)
   }
-};
+}
 
 // Method to change the number of cards per page
 const changePageSize = (size: number) => {
-  emit('page-size-changed', size);
-};
+  emit('page-size-changed', size)
+}
+
+watch(totalPages, () => {
+  console.log(totalPages)
+  if (props.currentPage > totalPages.value) {
+    changePage(totalPages.value)
+  }
+})
 
 // Computed function to calculate pagination behavior
 const middlePages = computed(() => {
-  const delta = 2; // Number of pages to show around the current page
-  const range: number[] = [];
+  const delta = 2 // Number of pages to show around the current page
+  const range: number[] = []
 
-  if (props.totalPages <= 1) return range; // If totalPages <= 1, return an empty array
+  if (props.totalPages <= 1) return range // If totalPages <= 1, return an empty array
 
-  let start = Math.max(2, props.currentPage - delta);
-  let end = Math.min(props.totalPages - 1, props.currentPage + delta);
+  let start = Math.max(2, props.currentPage - delta)
+  let end = Math.min(props.totalPages - 1, props.currentPage + delta)
 
   if (start > 2) {
-    start++;
+    start++
   }
   if (end < props.totalPages - 1) {
-    end--;
+    end--
   }
 
   for (let i = start; i <= end; i++) {
-    range.push(i);
+    range.push(i)
   }
 
-  return range;
-});
+  return range
+})
 
 const itemsPerPage = computed({
   get: () => props.pageSize,
   set: (value: number) => {
-    changePageSize(value);
+    changePageSize(value)
   },
-});
+})
 
 // Ellipsis visibility computed
-const showLeftEllipsis = computed(() => props.currentPage > 3 && props.totalPages > 1);
-const showRightEllipsis = computed(() => props.currentPage < props.totalPages - 2 && props.totalPages > 1);
+const showLeftEllipsis = computed(() => props.currentPage > 3 && props.totalPages > 1)
+const showRightEllipsis = computed(() => props.currentPage < props.totalPages - 2 && props.totalPages > 1)
 </script>
 
 <template>

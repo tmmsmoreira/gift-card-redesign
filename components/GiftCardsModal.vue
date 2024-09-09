@@ -23,6 +23,9 @@ const modalData = ref<IGiftCard | undefined>()
 const giftCardsStore = useGiftCardsStore()
 const { itemsPerPage } = storeToRefs(giftCardsStore)
 
+// Define emit to send events
+const emit = defineEmits(['closed']);
+
 const modalTitle = computed(() => {
   switch (modalAction.value) {
     case EModalActions.CREATE:
@@ -124,7 +127,7 @@ const closeModal = (e?: Event) => {
   // Close the modal programmatically if no event is provided
   if (!e) {
     modalElement.value?.close();
-    giftCardsStore.listGiftCards(itemsPerPage.value);
+    emit('closed')
   }
 
   if (modalAction.value) {

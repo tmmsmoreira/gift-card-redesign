@@ -39,21 +39,17 @@ export const useGiftCardsStore = defineStore('giftCards', {
   // Actions to interact with the AppWrite database
   actions: {
     // Fetch a paginated list of gift cards with optional search and offset
-    async listGiftCards(limit: number, offset?: number, search?: string) {
+    async listGiftCards(limit: number, offset: number, search: string) {
       this.loading = true // Set loading state to true while fetching data
-
-      // Set default values for offset and search if not provided
-      if (!offset) offset = 0
-      if (!search) search = ""
-
       // Fetch gift card documents from the database
       const promise = databases.listDocuments(
         APPWRITE_DATABASE_ID,
         APPWRITE_GIFT_CARD_COLLECTION_ID,
         [
-          Query.limit(limit),          // Limit the number of results
-          Query.offset(offset),        // Offset for pagination
-          Query.or([                   // Search for documents containing the search term in "name" or "code"
+          Query.limit(limit),           // Limit the number of results
+          Query.offset(offset),         // Offset for pagination
+          Query.orderDesc("$createdAt"), // Order the results by "attribute" in ascending order
+          Query.or([                    // Search for documents containing the search term in "name" or "code"
             Query.contains("name", search),
             Query.contains("code", search)
           ])
