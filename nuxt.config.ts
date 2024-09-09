@@ -30,5 +30,5 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-09-07',
-  modules: ['@pinia/nuxt'],
+  modules: ['@pinia/nuxt', '@nuxt/test-utils/module'],
 });

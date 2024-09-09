@@ -6,17 +6,15 @@ export enum EModalActions {
   VIEW = 'view'
 }
 
-export interface IGiftCard extends Models.Document {
-  name: string,
-  type: "price" | "service",
-  typeData: string,
-  code: string,
-  status: boolean
+export enum EGiftCardTypes {
+  PRICE = 'price',
+  SERVICE = 'service'
 }
 
-interface IGiftCardsStore {
-  loading: boolean,
-  list: IGiftCard[],
-  totalDocuments: number
-  selectedItem: IGiftCard | null
+export interface IGiftCard extends Models.Document {
+  name: string,
+  type?: EGiftCardTypes,
+  typeData: string,
+  code?: string,
+  status?: boolean
 }

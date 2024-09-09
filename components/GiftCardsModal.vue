@@ -4,9 +4,13 @@ import "@nordhealth/components/lib/Spinner"
 import "@nordhealth/components/lib/Input"
 import "@nordhealth/components/lib/Modal"
 import "@nordhealth/components/lib/ButtonGroup"
+import "@nordhealth/components/lib/Select"
+
 import type { Modal } from "@nordhealth/components";
 import type { IGiftCard } from "../types"
 import { EModalActions } from "../types"
+import giftCards from "../consts/giftCards.json"
+import { generateAlphanumericCode, debounce, formatDate } from "../utils"
 
 import { useGiftCardsStore } from "../stores/giftCards"
 import useField from "../composables/useField"
@@ -14,8 +18,10 @@ import useField from "../composables/useField"
 const modalAction = ref()
 const loadingModalData = ref(false)
 const modalElement = ref<InstanceType<typeof Modal>>()
+const modalData = ref<IGiftCard | undefined>()
 
 const giftCardsStore = useGiftCardsStore()
+const { itemsPerPage } = storeToRefs(giftCardsStore)
 
 const modalTitle = computed(() => {
   switch (modalAction.value) {
@@ -30,28 +36,99 @@ const modalTitle = computed(() => {
   }
 })
 
-const handleSubmit = () => {}
+const id = ref('')
+const name = useField('')
+const type = useField('')
+const code = useField('')
+const createdAt = useField('')
+const status = useField('')
+const typeData = useField('')
 
-const name = useField()
-const type = useField()
-const code = useField()
+const handleSubmit = () => {
+  loadingModalData.value = true
 
+  if (modalAction.value === EModalActions.UPDATE) {
+    giftCardsStore.updateGiftCard({
+      $id: id.value as string,
+      name: name.value,
+      typeData: typeData.value,
+    }).then(() => {
+      closeModal()
+    })
+  }
 
+  if (modalAction.value === EModalActions.CREATE) {
+    giftCardsStore.createGiftCard({
+      name: name.value,
+      type: type.value,
+      code: code.value,
+      typeData: typeData.value,
+      status: false
+    }).then(() => {
+      closeModal()
+    })
+  }
 
-const openModal = (action: EModalActions, id?: IGiftCard['$id']) => {
+}
+
+const openModal = async (action: EModalActions, cardType?: IGiftCard['$type'], cardId?: IGiftCard['$id']) => {
   loadingModalData.value = true
   modalAction.value = action
   modalElement.value?.showModal()
 
-  if (id) {
-    giftCardsStore.getGiftCard(id).then(giftCards => {
-      console.log(giftCards)
-      name.value = giftCards?.name || ''
-      type.value = giftCards?.type || ''
-      code.value = giftCards?.code || ''
-    }).finally(() => {
-      loadingModalData.value = false
+  if (cardId) {
+    id.value = cardId
+
+    await giftCardsStore.getGiftCard(id.value).then(giftCard => {
+      console.log(giftCard)
+      modalData.value = giftCard as IGiftCard
+    }).catch(error => {
+      // fallback to local data
+      console.log(error)
+      modalData.value = giftCards.documents.find(card => {
+        return card.$id === cardId
+      }) as IGiftCard | undefined;
     })
+
+    if (modalData.value) {
+      name.value = modalData.value.name || ''
+      type.value = modalData.value.type || ''
+      typeData.value = modalData.value.typeData || ''
+      code.value = modalData.value.code || ''
+      createdAt.value = modalData.value.$createdAt || ''
+      status.value = modalData.value.status || ''
+    }
+  } else {
+    type.value = cardType
+    code.value = generateAlphanumericCode() || ''
+  }
+
+  loadingModalData.value = false
+}
+
+const cleanModal = () => {
+  loadingModalData.value = false
+  modalAction.value = undefined
+  modalData.value = undefined
+
+  id.value = ''
+  name.value = ''
+  type.value = ''
+  code.value = ''
+  createdAt.value = ''
+  status.value = ''
+  typeData.value = ''
+}
+
+const closeModal = (e?: Event) => {
+  // Close the modal programmatically if no event is provided
+  if (!e) {
+    modalElement.value?.close();
+    giftCardsStore.listGiftCards(itemsPerPage.value);
+  }
+
+  if (modalAction.value) {
+    cleanModal()
   }
 }
 
@@ -59,37 +136,30 @@ defineExpose({ openModal })
 </script>
 
 <template>
-  <nord-modal ref="modalElement" size="m" aria-labelledby="title">
+  <nord-modal ref="modalElement" size="m" aria-labelledby="title" @close="closeModal">
     <h2 slot="header" id="title">{{ modalTitle }}</h2>
-    <div v-if="loadingModalData" class="n-padding-m n-align-center">
-      <nord-spinner  size="xl"></nord-spinner>
-    </div>
-    <form v-else action="#" @submit.prevent="handleSubmit">
+    <form action="#" @submit.prevent="handleSubmit" :disable="loadingModalData">
       <nord-stack>
-        <nord-input
-          label="Name"
-          name="name"
-          v-model="name.value"
-        />
-        
-        <nord-input
-          label="Type"
-          name="type"
-          v-model="type.value"
-        />
+        <nord-input label="Name" name="name" :readonly="modalAction === EModalActions.VIEW" v-model="name.value" />
 
-        <nord-input
-          label="Code"
-          name="code"
-          disabled
-          v-model="code.value"
-        />
+        <nord-input v-if="modalAction !== EModalActions.CREATE" label="Issued Date" name="createdAt"
+          :readonly="modalAction === EModalActions.VIEW || modalAction === EModalActions.UPDATE"
+          :value="createdAt.value ? formatDate(createdAt.value) : ''" />
+
+        <nord-input label="Type" name="type" readonly v-model="type.value" />
+
+        <nord-input label="Type Data" name="typeData" :readonly="modalAction === EModalActions.VIEW"
+          v-model="typeData.value" />
+
+        <nord-input label="Code" name="code" :readonly="modalAction === EModalActions.VIEW"
+          :disabled="modalAction === EModalActions.CREATE || modalAction === EModalActions.UPDATE"
+          v-model="code.value" />
       </nord-stack>
     </form>
 
     <nord-button-group v-if="modalAction !== EModalActions.VIEW" slot="footer" variant="spaced">
-      <nord-button expand id="confirmButton" variant="primary" autofocus>
-        {{ modalAction === EModalActions.CREATE ? 'Create' : 'Save changes'  }}
+      <nord-button variant="primary" @click="handleSubmit" :disabled="loadingModalData" :loading="loadingModalData">
+        {{ modalAction === EModalActions.CREATE ? 'Create' : 'Save changes' }}
       </nord-button>
     </nord-button-group>
   </nord-modal>

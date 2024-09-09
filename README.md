@@ -1,48 +1,79 @@
-# Nuxt Example
+```markdown
+# Gift Card Redesign Project
 
-Deploy your [Nuxt](https://nuxt.com) project to Vercel with zero configuration.
+This project is a redesign of the gift card system, built using [Nuxt](https://nuxt.com), backend created on AppWrite and deployed on Vercel.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/vercel/tree/main/examples/nuxtjs&template=nuxtjs)
+## Live Example
 
-_Live Example: https://nuxtjs-template.vercel.app_
+Check out the live example: [Gift Card Redesign](https://gift-card-redesign.vercel.app/)
 
-Look at the [Nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+## Documentation
+This project includes some unit tests, to demonstrate the functionality.
+
+Documentation for the tools used in this project:
+1. Nuxt 3, refer to the [Nuxt 3 documentation](https://v3.nuxtjs.org).
+2. AppWrite, refer to the [AppWrite documentation](https://appwrite.io/docs).
+
 
 ## Setup
 
-Make sure to install the dependencies:
+To set up the project locally, follow these steps:
 
-```bash
-# yarn
-yarn
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/your-username/gift-card-redesign.git
+    cd gift-card-redesign
+    ```
 
-# npm
-npm install
+2. Install the dependencies:
 
-# pnpm
-pnpm install --shamefully-hoist
-```
+    ```bash
+    # Using yarn
+    yarn
+
+    # Using npm
+    npm install
+
+    # Using pnpm
+    pnpm install --shamefully-hoist
+    ```
 
 ## Development Server
 
-Start the development server on http://localhost:3000
+To start the development server, run:
 
 ```bash
+# Using yarn
+yarn dev
+
+# Using npm
 npm run dev
+
+# Using pnpm
+pnpm dev
 ```
 
-## Production
+The development server will start on [http://localhost:3000](http://localhost:3000).
 
-Build the application for production:
+## Building for Production
+
+To build the project for production, run:
 
 ```bash
+# Using yarn
+yarn build
+
+# Using npm
 npm run build
+
+# Using pnpm
+pnpm build
 ```
 
-Locally preview production build:
+## Deployment
 
-```bash
-npm run preview
+The project is configured to be deployed on Vercel. You can deploy it by clicking the button below:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/gift-card-redesign&template=nuxtjs)
+
 ```
-
-Checkout the [deployment documentation](https://nuxt.com/docs/getting-started/deployment#presets) for more information.
