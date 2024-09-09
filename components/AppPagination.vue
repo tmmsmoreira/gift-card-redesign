@@ -62,6 +62,7 @@ const middlePages = computed(() => {
   if (start > 2) {
     start++
   }
+
   if (end < props.totalPages - 1) {
     end--
   }
@@ -81,8 +82,17 @@ const itemsPerPage = computed({
 })
 
 // Ellipsis visibility computed
-const showLeftEllipsis = computed(() => props.currentPage > 3 && props.totalPages > 1)
-const showRightEllipsis = computed(() => props.currentPage < props.totalPages - 2 && props.totalPages > 1)
+const showLeftEllipsis = computed(() => 
+  props.currentPage > 3 && 
+  props.totalPages > 1 && 
+  !$viewport.isLessThan('tablet')
+
+)
+const showRightEllipsis = computed(() => 
+  props.currentPage < props.totalPages - 2 &&
+  props.totalPages > 1 &&
+  !$viewport.isLessThan('tablet')
+)
 </script>
 
 <template>
@@ -112,6 +122,7 @@ const showRightEllipsis = computed(() => props.currentPage < props.totalPages - 
 
       <!-- First Page -->
       <nord-button 
+        v-if="!$viewport.isLessThan('tablet')"
         :variant="currentPage === 1 ? 'primary' : undefined" 
         @click.prevent="changePage(1)"
       >
@@ -123,6 +134,7 @@ const showRightEllipsis = computed(() => props.currentPage < props.totalPages - 
 
       <!-- Middle Page Numbers -->
       <template 
+        v-if="!$viewport.isLessThan('tablet')"
         v-for="page in middlePages" 
         :key="page" 
         :class="['page-item', { active: currentPage === page }]"
@@ -140,7 +152,7 @@ const showRightEllipsis = computed(() => props.currentPage < props.totalPages - 
 
       <!-- Last Page -->
       <nord-button 
-        v-if="totalPages > 1"
+        v-if="totalPages > 1 && !$viewport.isLessThan('tablet')"
         :variant="currentPage === totalPages ? 'primary' : undefined"
         @click.prevent="changePage(totalPages)"
       >
